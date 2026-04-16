@@ -33,10 +33,11 @@ const AdminLogin = () => {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.message || "ავტორიზაცია ვერ განხორციელდა");
+        setError(data.message || "Login failed");
         return;
       }
 
+      // Redirect to admin dashboard
       window.location.href = "/admin/dashboard";
     } catch (err) {
       console.error("Admin login error:", err);
@@ -50,7 +51,7 @@ const AdminLogin = () => {
     <div className="h-screen bg-[#081028] flex justify-center items-center">
       <div className="bg-[#0B1739] p-8 rounded-lg shadow-lg w-96">
         <h2 className="text-2xl font-bold text-white text-center mb-6">
-          ადმინისტრატორის ავტორიზაცია
+          Admin Login
         </h2>
 
         {error && (
@@ -62,7 +63,7 @@ const AdminLogin = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
-              ელ.ფოსტა
+              Email
             </label>
             <input
               type="email"
@@ -70,14 +71,14 @@ const AdminLogin = () => {
               value={formData.email}
               onChange={handleChange}
               className="w-full px-4 py-2 bg-[#0B1739] border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="ელ.ფოსტა"
+              placeholder="Enter admin email"
               required
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
-              პაროლი
+              Password
             </label>
             <input
               type="password"
@@ -85,7 +86,7 @@ const AdminLogin = () => {
               value={formData.password}
               onChange={handleChange}
               className="w-full px-4 py-2 bg-[#0B1739] border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="პაროლი"
+              placeholder="Enter admin password"
               required
             />
           </div>
@@ -95,7 +96,7 @@ const AdminLogin = () => {
             disabled={loading}
             className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? "ავტორიზაცია..." : "შესვლა"}
+            {loading ? "Signing In..." : "Sign In"}
           </button>
         </form>
       </div>

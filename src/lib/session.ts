@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 
 export async function getCurrentUser() {
+  // ✅ await cookies() because in this environment it's a Promise
   const cookieStore = await cookies();
   const tokenCookie = cookieStore.get("token");
 
@@ -15,9 +16,11 @@ export async function getCurrentUser() {
     };
     const user = await prisma.user.findUnique({
       where: { id: decoded.id },
-      include: { StudentProfile: true },
+      include: { StudentProfile: true }, // fetch profile along with user
     });
-    return user || null;
+    if (!user) return null;
+    console.log(user);
+    return user;
   } catch (err) {
     console.error("Invalid JWT:", err);
     return null;

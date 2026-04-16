@@ -47,57 +47,6 @@ const FutureLessonsBoxTime: React.FC<FutureLessonsBoxTimeProps> = ({
   );
 };
 
-const getLessonDateTime = (lesson: Lesson | BookedLesson) => {
-  const lessonDate = new Date(lesson.date);
-  const [hours, minutes] = lesson.time.split(":").map(Number);
-  lessonDate.setHours(hours, minutes, 0, 0);
-  return lessonDate;
-};
-
-const getAttendanceWindow = (lesson: Lesson | BookedLesson) => {
-  const start = getLessonDateTime(lesson);
-  const openAt = new Date(start.getTime() - 5 * 60 * 1000);
-  const end = new Date(start.getTime() + lesson.duration * 60 * 1000);
-  return { openAt, start, end };
-};
-
-const formatTime = (date: Date) =>
-  `${date.getHours().toString().padStart(2, "0")}:${date
-    .getMinutes()
-    .toString()
-    .padStart(2, "0")}`;
-
-const getAttendanceStatus = (lesson: Lesson | BookedLesson) => {
-  const now = new Date();
-  const { openAt, start, end } = getAttendanceWindow(lesson);
-
-  if (now < openAt) {
-    return {
-      state: "locked" as const,
-      message: `შეხვედრა ხელმისაწვდომი გახდება ${formatTime(openAt)}`,
-    };
-  }
-
-  if (now > end) {
-    return {
-      state: "expired" as const,
-      message: "გაკვეთილი დასრულებულია",
-    };
-  }
-
-  if (!lesson.link) {
-    return {
-      state: "noLink" as const,
-      message: "შეხვედრის ლინკი ჯერ არ არის მითითებული",
-    };
-  }
-
-  return {
-    state: "available" as const,
-    message: `შეხვედრა დაიწყება ${formatTime(start)}`,
-  };
-};
-
 const FutureLessonsBoxContent = ({
   teacher = false,
   lesson,
@@ -119,14 +68,7 @@ const FutureLessonsBoxContent = ({
     lesson.student?.lastName || ""
   }`;
 
-  const attendanceStatus = getAttendanceStatus(lesson);
-
   const handleAttendanceClick = () => {
-    if (attendanceStatus.state !== "available") {
-      toast.error(attendanceStatus.message);
-      return;
-    }
-
     if (lesson.link) {
       window.open(lesson.link, "_blank");
     } else {
@@ -177,29 +119,13 @@ const FutureLessonsBoxContent = ({
         </div>
       </div>
       {teacher && booked ? (
-        <div className="flex flex-col gap-2 sm:flex-row sm:gap-2">
+        <div className="flex flex-col gap-3 sm:flex-row sm:gap-2">
           <button
-            className={`text-sm leading-5 font-helveticaneue-regular py-3 rounded-[50px] sm:px-[34px] order-1 sm:order-2 transition ${
-              attendanceStatus.state === "available"
-                ? "bg-[#F0C514] text-[#080808] hover:bg-[#e2b80f]"
-                : "bg-[#F0F0F0] text-[#A1A1A1] cursor-not-allowed"
-            }`}
+            className="text-sm leading-5 font-helveticaneue-regular py-3 rounded-[50px] bg-[#F0C514] text-[#080808] cursor-pointer sm:px-[34px] order-1 sm:order-2"
             onClick={handleAttendanceClick}
-            disabled={attendanceStatus.state !== "available"}
           >
-            {attendanceStatus.state === "locked"
-              ? "დადება"
-              : attendanceStatus.state === "expired"
-              ? "დასრულებულია"
-              : attendanceStatus.state === "noLink"
-              ? "ლინკი არ არის"
-              : "დასწრება"}
+            დასწრება
           </button>
-          {attendanceStatus.state !== "available" && (
-            <span className="text-xs leading-4 text-[#737373] font-helveticaneue-regular">
-              {attendanceStatus.message}
-            </span>
-          )}
         </div>
       ) : teacher ? (
         <div className="flex gap-3 sm:flex-row sm:gap-2">
@@ -217,30 +143,12 @@ const FutureLessonsBoxContent = ({
           </button>
         </div>
       ) : (
-        <div className="flex flex-col gap-2">
-          <button
-            className={`text-sm leading-5 font-helveticaneue-regular py-3 rounded-[50px] sm:px-[34px] transition ${
-              attendanceStatus.state === "available"
-                ? "bg-white text-[#080808] hover:bg-gray-100"
-                : "bg-[#F0F0F0] text-[#A1A1A1] cursor-not-allowed"
-            }`}
-            onClick={handleAttendanceClick}
-            disabled={attendanceStatus.state !== "available"}
-          >
-            {attendanceStatus.state === "locked"
-              ? "დალოდება"
-              : attendanceStatus.state === "expired"
-              ? "დასრულებულია"
-              : attendanceStatus.state === "noLink"
-              ? "ლინკი არ არის"
-              : "დასწრება"}
-          </button>
-          {attendanceStatus.state !== "available" && (
-            <span className="text-xs leading-4 text-[#737373] font-helveticaneue-regular">
-              {attendanceStatus.message}
-            </span>
-          )}
-        </div>
+        <button
+          className="text-sm leading-5 font-helveticaneue-regular py-3 rounded-[50px] bg-white cursor-pointer sm:px-[34px]"
+          onClick={handleAttendanceClick}
+        >
+          დასწრება
+        </button>
       )}
     </div>
   );
