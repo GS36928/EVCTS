@@ -83,7 +83,30 @@ const Footer = ({ userExist }: { userExist?: string | null }) => {
           <div className="flex flex-col gap-4">
             <span className={`${spanClass}`}>დახმარება</span>
             <ul className="flex flex-col gap-3">
-              <li className={`${liClass}`}>info@evectus.ge</li>
+              <li>
+                <a
+                  href="mailto:info@evectus.ge"
+                  className={`${liClass} hover:text-white underline`}
+                >
+                  info@evectus.ge
+                </a>
+              </li>
+              <li>
+                <a
+                  href="tel:+995550506963"
+                  className={`${liClass} hover:text-white`}
+                >
+                  +995 550 50 69 63
+                </a>
+              </li>
+              <li>
+                <Link
+                  href="/support"
+                  className={`${liClass} hover:text-white underline`}
+                >
+                  დახმარება და მხარდაჭერა
+                </Link>
+              </li>
             </ul>
             <div className="flex gap-3">
               <Link

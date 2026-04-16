@@ -9,13 +9,6 @@ export async function GET(req: Request) {
     const studentId = url.searchParams.get("studentId");
     const teacherId = url.searchParams.get("teacherId");
 
-    console.log(
-      "🔍 API called with studentId:",
-      studentId,
-      "teacherId:",
-      teacherId
-    );
-
     if (!studentId && !teacherId) {
       return NextResponse.json(
         { error: "studentId ან teacherId სავალდებულოა" },

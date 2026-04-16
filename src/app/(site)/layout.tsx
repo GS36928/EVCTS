@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import Providers from "./Providers";
 import { ScrollToTop } from "@/utils/ScrollToTop";
+import ChatWidget from "@/components/ui/ChatWidget";
 
 const geistSans = Geist({
   subsets: ["latin"],
@@ -17,7 +18,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Evectus",
-  description: "...",
+  description:
+    "Evectus არის ქართული განათლების პლატფორმა მოსწავლეებისა და მასწავლებლებისთვის ონლაინ გაკვეთილების გასატარებლად.",
   icons: { icon: "/favicon.ico" },
 };
 
@@ -27,10 +29,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={geistSans.className}>
+    <html lang="ka" className={geistSans.className}>
       <body className={`${geistMono.className} antialiased`}>
         <Providers>
           <ScrollToTop />
+          <ChatWidget />
           {children}
           <Toaster
             position="top-right"
